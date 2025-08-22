@@ -1,16 +1,32 @@
-// import { api } from "@/services/api-sw";
-// import { People } from "@/types/sw-types";
+import { PeopleTable } from "@/features/people-table";
+import { api } from "@/services/api-sw";
+import { People } from "@/types/sw-types";
+
 
 export default function Home() {
-  // const tableData: People = api.getPeople(1) // TODO: use serverApi to get page 1 for server rendering
+  const tableData: People = api.getPeople()
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+    <div className="min-h-screen flex flex-col bg-background">
+      <main className="flex h-screen flex-col items-center justify-center bg-gradient-to-b from-background to-star-primary transition-all duration-300">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold mb-4 text-lightsaber-yellow transition-colors duration-200">
+            Welcome to the Galaxy
+          </h1>
+          <p className="text-lg text-lightsaber-yellow transition-colors duration-200">
+            May the Force be with you
+          </p>
+        </div>
+
+        <div className="text-lightsaber-yellow transition-colors duration-200 mb-4">
+          <p>the table</p>
+          {/* <Filters /> */}
+          {/* <SortBy /> */}
+          <PeopleTable data={tableData} search/>
+          {/* <Pagination /> */}
+        </div>
 
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-
-      </footer>
     </div>
   );
 }

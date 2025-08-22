@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import axiosInstance from './axios-instance'
 import { People, Character } from '@/types/sw-types'
 
-class ApiClient {
+class Api {
   private shouldRetry(error: AxiosError): boolean {
     // Retry on network errors or 5xx server errors
     return (
@@ -109,8 +109,8 @@ class ApiClient {
 
   // ---------------------------------------- API CALLS ---------------------------------------- //
   // ----- SWAPI ----- //
-  async getPeople(page: number): Promise<People> {
-    return this.get<People>(`/people?page=${page}`)
+  async getPeople(): Promise<People> {
+    return this.get<People>(`/people}`)
   }
 
   async getCharacter(id: string): Promise<Character> {
@@ -118,4 +118,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient()
+export const api = new Api()
