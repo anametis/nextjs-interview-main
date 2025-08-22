@@ -3,120 +3,284 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+/* Star Wars Theme Colors for Tailwind v4 */
+
+@theme {
+  /*========== FONTS ==========*/
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
+
+  /*========== COLORS ==========*/
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Star Wars Primary Colors */
+  --color-jedi-blue: var(--jedi-blue);
+  --color-jedi-blue-foreground: var(--jedi-blue-foreground);
+  --color-sith-red: var(--sith-red);
+  --color-sith-red-foreground: var(--sith-red-foreground);
+  --color-empire-gray: var(--empire-gray);
+  --color-empire-gray-foreground: var(--empire-gray-foreground);
+  --color-rebel-orange: var(--rebel-orange);
+  --color-rebel-orange-foreground: var(--rebel-orange-foreground);
+
+  /* Lightsaber Colors */
+  --color-lightsaber-blue: var(--lightsaber-blue);
+  --color-lightsaber-green: var(--lightsaber-green);
+  --color-lightsaber-purple: var(--lightsaber-purple);
+  --color-lightsaber-red: var(--lightsaber-red);
+  --color-lightsaber-yellow: var(--lightsaber-yellow);
+
+  /* Planet/Environment Colors */
+  --color-tatooine: var(--tatooine);
+  --color-tatooine-foreground: var(--tatooine-foreground);
+  --color-hoth: var(--hoth);
+  --color-hoth-foreground: var(--hoth-foreground);
+  --color-endor: var(--endor);
+  --color-endor-foreground: var(--endor-foreground);
+  --color-coruscant: var(--coruscant);
+  --color-coruscant-foreground: var(--coruscant-foreground);
+
+  /* Standard System Colors */
   --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Chart Colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /*========== RADII ==========*/
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* Light Theme - Bright, clean like the Rebellion */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --radius: 0.5rem;
+
+  /* Base Colors - Clean Rebellion aesthetic */
+  --background: oklch(0.99 0.005 90); /* Bright white with subtle warmth */
+  --foreground: oklch(0.15 0.02 240); /* Deep space blue-black */
+
+  /* Card/Surface Colors */
+  --card: oklch(0.97 0.008 90); /* Slightly off-white */
+  --card-foreground: oklch(0.15 0.02 240);
+  --popover: oklch(0.98 0.006 90);
+  --popover-foreground: oklch(0.15 0.02 240);
+
+  /* Primary - Jedi Blue (Luke's lightsaber) */
+  --primary: oklch(0.55 0.25 240); /* Classic Jedi blue */
+  --primary-foreground: oklch(0.98 0.01 240);
+  --jedi-blue: oklch(0.55 0.25 240);
+  --jedi-blue-foreground: oklch(0.98 0.01 240);
+
+  /* Secondary - Empire Gray (Imperial aesthetic) */
+  --secondary: oklch(0.85 0.01 240); /* Light Imperial gray */
+  --secondary-foreground: oklch(0.25 0.02 240);
+  --empire-gray: oklch(0.45 0.02 240);
+  --empire-gray-foreground: oklch(0.98 0.01 240);
+
+  /* Accent - Rebel Orange (X-wing markings) */
+  --accent: oklch(0.75 0.2 45); /* Rebel Alliance orange */
+  --accent-foreground: oklch(0.15 0.02 45);
+  --rebel-orange: oklch(0.75 0.2 45);
+  --rebel-orange-foreground: oklch(0.15 0.02 45);
+
+  /* Destructive - Sith Red (Vader's lightsaber) */
+  --destructive: oklch(0.6 0.28 15); /* Sith red */
+  --destructive-foreground: oklch(0.98 0.01 15);
+  --sith-red: oklch(0.6 0.28 15);
+  --sith-red-foreground: oklch(0.98 0.01 15);
+
+  /* Muted Colors */
+  --muted: oklch(0.92 0.01 240);
+  --muted-foreground: oklch(0.5 0.02 240);
+
+  /* Border/Input */
+  --border: oklch(0.88 0.015 240);
+  --input: oklch(0.95 0.01 240);
+  --ring: oklch(0.55 0.25 240); /* Matches primary */
+
+  /* Lightsaber Colors */
+  --lightsaber-blue: oklch(0.65 0.3 240); /* Luke/Anakin */
+  --lightsaber-green: oklch(0.65 0.25 140); /* Yoda/Luke ROTJ */
+  --lightsaber-purple: oklch(0.55 0.25 300); /* Mace Windu */
+  --lightsaber-red: oklch(0.55 0.3 15); /* Sith */
+  --lightsaber-yellow: oklch(0.8 0.2 85); /* Temple Guard */
+
+  /* Planet Colors */
+  --tatooine: oklch(0.85 0.15 65); /* Desert sand */
+  --tatooine-foreground: oklch(0.2 0.05 65);
+  --hoth: oklch(0.92 0.05 220); /* Ice planet white-blue */
+  --hoth-foreground: oklch(0.2 0.02 220);
+  --endor: oklch(0.55 0.2 120); /* Forest green */
+  --endor-foreground: oklch(0.95 0.05 120);
+  --coruscant: oklch(0.7 0.15 280); /* City lights purple-blue */
+  --coruscant-foreground: oklch(0.95 0.02 280);
+
+  /* Chart Colors - Star Wars themed */
+  --chart-1: oklch(0.55 0.25 240); /* Jedi blue */
+  --chart-2: oklch(0.6 0.28 15); /* Sith red */
+  --chart-3: oklch(0.75 0.2 45); /* Rebel orange */
+  --chart-4: oklch(0.65 0.25 140); /* Lightsaber green */
+  --chart-5: oklch(0.55 0.25 300); /* Lightsaber purple */
 }
 
+/* Dark Theme - Empire/First Order aesthetic */
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  /* Base Colors - Dark Empire aesthetic */
+  --background: oklch(0.08 0.015 240); /* Deep space black */
+  --foreground: oklch(0.92 0.01 240); /* Bright white text */
+
+  /* Card/Surface Colors */
+  --card: oklch(0.12 0.02 240); /* Dark Imperial panels */
+  --card-foreground: oklch(0.92 0.01 240);
+  --popover: oklch(0.1 0.02 240);
+  --popover-foreground: oklch(0.92 0.01 240);
+
+  /* Primary - Bright Jedi Blue (more vibrant in dark) */
+  --primary: oklch(0.7 0.3 240); /* Brighter Jedi blue */
+  --primary-foreground: oklch(0.08 0.015 240);
+  --jedi-blue: oklch(0.7 0.3 240);
+  --jedi-blue-foreground: oklch(0.08 0.015 240);
+
+  /* Secondary - Dark Empire Gray */
+  --secondary: oklch(0.2 0.02 240); /* Dark Imperial gray */
+  --secondary-foreground: oklch(0.92 0.01 240);
+  --empire-gray: oklch(0.25 0.03 240);
+  --empire-gray-foreground: oklch(0.92 0.01 240);
+
+  /* Accent - Bright Rebel Orange */
+  --accent: oklch(0.8 0.25 45); /* Brighter orange */
+  --accent-foreground: oklch(0.08 0.02 45);
+  --rebel-orange: oklch(0.8 0.25 45);
+  --rebel-orange-foreground: oklch(0.08 0.02 45);
+
+  /* Destructive - Glowing Sith Red */
+  --destructive: oklch(0.75 0.35 15); /* Glowing Sith red */
+  --destructive-foreground: oklch(0.95 0.02 15);
+  --sith-red: oklch(0.75 0.35 15);
+  --sith-red-foreground: oklch(0.95 0.02 15);
+
+  /* Muted Colors */
+  --muted: oklch(0.15 0.02 240);
+  --muted-foreground: oklch(0.6 0.02 240);
+
+  /* Border/Input */
+  --border: oklch(0.2 0.02 240);
+  --input: oklch(0.15 0.02 240);
+  --ring: oklch(0.7 0.3 240); /* Matches primary */
+
+  /* Lightsaber Colors - Glowing in darkness */
+  --lightsaber-blue: oklch(0.8 0.35 240); /* Bright glowing blue */
+  --lightsaber-green: oklch(0.8 0.3 140); /* Bright glowing green */
+  --lightsaber-purple: oklch(0.75 0.3 300); /* Bright glowing purple */
+  --lightsaber-red: oklch(0.8 0.4 15); /* Bright glowing red */
+  --lightsaber-yellow: oklch(0.9 0.25 85); /* Bright glowing yellow */
+
+  /* Planet Colors - Enhanced for dark theme */
+  --tatooine: oklch(0.7 0.2 65); /* Bright desert sand */
+  --tatooine-foreground: oklch(0.1 0.02 65);
+  --hoth: oklch(0.85 0.1 220); /* Bright ice blue */
+  --hoth-foreground: oklch(0.1 0.02 220);
+  --endor: oklch(0.7 0.25 120); /* Bright forest green */
+  --endor-foreground: oklch(0.05 0.01 120);
+  --coruscant: oklch(0.8 0.2 280); /* Bright city lights */
+  --coruscant-foreground: oklch(0.05 0.01 280);
+
+  /* Chart Colors - Glowing versions */
+  --chart-1: oklch(0.7 0.3 240); /* Bright Jedi blue */
+  --chart-2: oklch(0.75 0.35 15); /* Bright Sith red */
+  --chart-3: oklch(0.8 0.25 45); /* Bright rebel orange */
+  --chart-4: oklch(0.8 0.3 140); /* Bright lightsaber green */
+  --chart-5: oklch(0.75 0.3 300); /* Bright lightsaber purple */
+}
+
+/* Additional utility classes for Star Wars theming */
+@layer utilities {
+  .text-jedi {
+    color: var(--jedi-blue);
+  }
+  .text-sith {
+    color: var(--sith-red);
+  }
+  .text-rebel {
+    color: var(--rebel-orange);
+  }
+  .text-empire {
+    color: var(--empire-gray);
+  }
+
+  .bg-jedi {
+    background-color: var(--jedi-blue);
+  }
+  .bg-sith {
+    background-color: var(--sith-red);
+  }
+  .bg-rebel {
+    background-color: var(--rebel-orange);
+  }
+  .bg-empire {
+    background-color: var(--empire-gray);
+  }
+
+  .border-jedi {
+    border-color: var(--jedi-blue);
+  }
+  .border-sith {
+    border-color: var(--sith-red);
+  }
+  .border-rebel {
+    border-color: var(--rebel-orange);
+  }
+  .border-empire {
+    border-color: var(--empire-gray);
+  }
+
+  /* Lightsaber glow effects */
+  .lightsaber-glow-blue {
+    box-shadow: 0 0 10px var(--lightsaber-blue), 0 0 20px var(--lightsaber-blue);
+  }
+  .lightsaber-glow-red {
+    box-shadow: 0 0 10px var(--lightsaber-red), 0 0 20px var(--lightsaber-red);
+  }
+  .lightsaber-glow-green {
+    box-shadow: 0 0 10px var(--lightsaber-green),
+      0 0 20px var(--lightsaber-green);
+  }
+  .lightsaber-glow-purple {
+    box-shadow: 0 0 10px var(--lightsaber-purple),
+      0 0 20px var(--lightsaber-purple);
+  }
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
+    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
