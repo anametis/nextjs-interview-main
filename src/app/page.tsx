@@ -1,10 +1,10 @@
+import { MOCK_DATA } from "@/constants/moc-data";
 import { PeopleTable } from "@/features/people-table";
-import { api } from "@/services/api-sw";
 import { People } from "@/types/sw-types";
+// import { api } from "@/services/api-sw";
 
-
-export default function Home() {
-  const tableData: People = api.getPeople()
+export default async function Home() {
+  const tableData: People = MOCK_DATA;
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -18,14 +18,9 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="text-lightsaber-yellow transition-colors duration-200 mb-4">
-          <p>the table</p>
-          {/* <Filters /> */}
-          {/* <SortBy /> */}
-          <PeopleTable data={tableData} search/>
-          {/* <Pagination /> */}
+        <div className="w-full max-w-6xl px-4">
+          <PeopleTable data={tableData} />
         </div>
-
       </main>
     </div>
   );
