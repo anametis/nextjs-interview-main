@@ -1,6 +1,4 @@
-// import StarIcon from "@/../public/star.svg";
-// import  SparkleIcon from "@/../public/sparkle.svg"
-import { SparkleIcon, StarIcon } from "lucide-react";
+import { StarIcon, SparkleIcon } from "@/../public/icons/custom-icons";
 import Orbit from "@/components/orbit";
 
 export const Hero = () => {
