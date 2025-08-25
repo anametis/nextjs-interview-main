@@ -19,7 +19,7 @@ export function Header() {
 
   return (
     <nav className="border-b border-border bg-card/50 backdrop-blur-sm">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2">
@@ -63,15 +63,15 @@ export function Header() {
 
             {/* Mobile menu button */}
             <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden"
+              variant="outline"
+              size="icon"
+              className="md:hidden bg-background/80 backdrop-blur-sm border-border/50 hover:bg-background/90 transition-all duration-200"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (
-                <X className="h-4 w-4" />
+                <X className="size-5" />
               ) : (
-                <Menu className="h-4 w-4" />
+                <Menu className="size-5" />
               )}
             </Button>
           </div>
