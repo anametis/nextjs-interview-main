@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 // ================================ API Configuration ================================ //
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL?.trim() || "https://swapi.dev/api";
+  process.env.NEXT_PUBLIC_BASE_URL?.trim() || "https://swapi.info/api";
 const API_TIMEOUT_MS = Number(
   process.env.NEXT_PUBLIC_API_TIMEOUT_MS?.trim() || "10000"
 );
