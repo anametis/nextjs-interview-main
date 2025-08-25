@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface VirtualizationOptions {
   itemHeight: number;
@@ -17,8 +17,8 @@ export const useVirtualization = <T>(
   options: VirtualizationOptions
 ) => {
   const { itemHeight, containerHeight, overscan = 5 } = options;
-  const scrollElementRef = React.useRef<HTMLDivElement>(null);
-  const [scrollTop, setScrollTop] = React.useState(0);
+  const scrollElementRef = useRef<HTMLDivElement>(null);
+  const [scrollTop, setScrollTop] = useState(0);
 
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
   const endIndex = Math.min(
@@ -26,7 +26,7 @@ export const useVirtualization = <T>(
     Math.floor((scrollTop + containerHeight) / itemHeight) + overscan
   );
 
-  const virtualItems: VirtualItem[] = React.useMemo(() => {
+  const virtualItems: VirtualItem[] = useMemo(() => {
     const items = [];
     for (let i = startIndex; i <= endIndex; i++) {
       items.push({
@@ -38,7 +38,7 @@ export const useVirtualization = <T>(
     return items;
   }, [startIndex, endIndex, itemHeight]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const element = scrollElementRef.current;
     if (!element) return;
 
@@ -46,8 +46,8 @@ export const useVirtualization = <T>(
       setScrollTop(element.scrollTop);
     };
 
-    element.addEventListener('scroll', handleScroll);
-    return () => element.removeEventListener('scroll', handleScroll);
+    element.addEventListener("scroll", handleScroll);
+    return () => element.removeEventListener("scroll", handleScroll);
   }, []);
 
   const totalSize = items.length * itemHeight;

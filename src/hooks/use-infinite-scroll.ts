@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface InfiniteScrollOptions {
   threshold?: number; // Distance from bottom to trigger load
@@ -11,9 +11,9 @@ export const useInfiniteScroll = (
   options: InfiniteScrollOptions
 ) => {
   const { threshold = 200, hasMore, isLoading } = options;
-  const [isFetching, setIsFetching] = React.useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isFetching) return;
 
     const fetchData = async () => {
@@ -26,7 +26,7 @@ export const useInfiniteScroll = (
     fetchData();
   }, [isFetching, hasMore, isLoading, loadMore]);
 
-  const scrollHandler = React.useCallback(
+  const scrollHandler = useCallback(
     (scrollElement: HTMLElement) => {
       const { scrollTop, scrollHeight, clientHeight } = scrollElement;
 

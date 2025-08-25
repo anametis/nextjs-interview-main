@@ -1,10 +1,10 @@
-import * as React from 'react';
+import { useEffect, useRef, useState } from "react";
 
 export const useThrottle = <T>(value: T, delay = 500) => {
-  const [throttledValue, setThrottledValue] = React.useState(value);
-  const lastExecuted = React.useRef<number>(Date.now());
+  const [throttledValue, setThrottledValue] = useState(value);
+  const lastExecuted = useRef<number>(Date.now());
 
-  React.useEffect(() => {
+  useEffect(() => {
     const now = Date.now();
     const timeSinceLastExecution = now - lastExecuted.current;
 
