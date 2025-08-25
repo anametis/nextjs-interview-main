@@ -94,10 +94,94 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="rounded-md w-full border star-wars-border">
-      <div
-        ref={tableContainerRef}
-        className={isInfiniteScroll ? "h-[600px] overflow-y-auto" : ""}
-      >
+      {isInfiniteScroll ? (
+        <>
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow
+                  key={headerGroup.id}
+                  className="border-border hover:bg-muted/50"
+                >
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead
+                        key={header.id}
+                        className="text-primary font-bold"
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+          </Table>
+          <div ref={tableContainerRef} className="h-[600px] overflow-y-auto">
+            <Table>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  <>
+                    {table.getRowModel().rows.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && "selected"}
+                        className="border-border hover:bg-muted/50 transition-colors cursor-pointer"
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                    {isFetchingNextPage && (
+                      <TableRow>
+                        <TableCell
+                          colSpan={columns.length}
+                          className="h-16 text-center"
+                        >
+                          <div className="flex items-center justify-center">
+                            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2"></div>
+                            Loading more...
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                    {!hasNextPage && !isFetchingNextPage && (
+                      <TableRow>
+                        <TableCell
+                          colSpan={columns.length}
+                          className="h-16 text-center text-muted-foreground"
+                        >
+                          No more characters to load
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </>
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </>
+      ) : (
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -125,47 +209,22 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              <>
-                {table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className="border-border hover:bg-muted/50 transition-colors cursor-pointer"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-                {isInfiniteScroll && isFetchingNextPage && (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-16 text-center"
-                    >
-                      <div className="flex items-center justify-center">
-                        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2"></div>
-                        Loading more...
-                      </div>
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className="border-border hover:bg-muted/50 transition-colors cursor-pointer"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
-                  </TableRow>
-                )}
-                {isInfiniteScroll && !hasNextPage && !isFetchingNextPage && (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-16 text-center text-muted-foreground"
-                    >
-                      No more characters to load
-                    </TableCell>
-                  </TableRow>
-                )}
-              </>
+                  ))}
+                </TableRow>
+              ))
             ) : (
               <TableRow>
                 <TableCell
@@ -178,7 +237,7 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-      </div>
+      )}
     </div>
   );
 }
