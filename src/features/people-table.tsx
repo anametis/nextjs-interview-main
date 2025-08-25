@@ -1,291 +1,177 @@
 "use client";
-import { Character } from "@/types/sw-types";
 import { useState, useMemo } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Character, People } from "@/types/sw-types";
+import { useFavoritesStore } from "@/stores/favorites-store";
+import { filterCharacters, paginateCharacters } from "@/utils/character-utils";
+import { DataTable } from "@/components/table/data-table";
+import { CharacterFilters } from "@/components/table/filters";
+import { columns } from "@/components/table/columns";
+import { PaginationControls } from "@/components/table/pagination";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { CharacterDetailsModal } from "@/features/details.modal";
+import { FilterState } from "@/components/table/types";
 
-interface PeopleTableProps {
-  data: Character[];
-}
-
-interface SortConfig {
-  key: keyof Character;
-  direction: "asc" | "desc";
-}
-
-export function PeopleTable({ data }: PeopleTableProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortConfig, setSortConfig] = useState<SortConfig>({
-    key: "name",
-    direction: "asc",
+export function PeopleTable({ data }: { data: People }) {
+  const { favorites, addFavorite, removeFavorite } = useFavoritesStore();
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
+    null
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterState>({
+    search: "",
+    gender: "",
+    heightMin: "",
+    heightMax: "",
+    massMin: "",
+    massMax: "",
+    eyeColor: "",
+    hairColor: "",
+    birthYear: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [pageSize, setPageSize] = useState(20);
+  const [isInfiniteScroll, setIsInfiniteScroll] = useState(false);
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
 
-  // Filter and sort data
-  const filteredAndSortedData = useMemo(() => {
-    const filtered = data.filter(
-      (character) =>
-        character.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        character.homeworld.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        character.gender.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    // Sort data
-    const sorted = [...filtered].sort((a, b) => {
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
-
-      if (typeof aValue === "string" && typeof bValue === "string") {
-        if (sortConfig.direction === "asc") {
-          return aValue.localeCompare(bValue);
-        } else {
-          return bValue.localeCompare(aValue);
-        }
-      }
-
-      return 0;
-    });
-
-    return sorted;
-  }, [data, searchTerm, sortConfig]);
-
-  // Pagination
-  const totalPages = Math.ceil(filteredAndSortedData.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredAndSortedData.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
-
-  const handleSort = (key: keyof Character) => {
-    setSortConfig((prev) => ({
-      key,
-      direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
-    }));
-    setCurrentPage(1);
+  const handleViewDetails = (character: Character) => {
+    setSelectedCharacter(character);
+    setIsModalOpen(true);
   };
 
-  const handleSearch = (value: string) => {
-    setSearchTerm(value);
-    setCurrentPage(1);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedCharacter(null);
+  };
+  const isFavorite = (character: Character) => {
+    return favorites.some((fav) => fav.url === character.url);
   };
 
-  const formatValue = (value: string | string[]) => {
-    if (Array.isArray(value)) {
-      return value.length > 0 ? value.join(", ") : "None";
+  const handleToggleFavorite = (character: Character) => {
+    if (isFavorite(character)) {
+      removeFavorite(character);
+    } else {
+      addFavorite(character);
     }
-    return value || "Unknown";
   };
 
-  const getSortIcon = (key: keyof Character) => {
-    if (sortConfig.key !== key) return "↕️";
-    return sortConfig.direction === "asc" ? "↑" : "↓";
+  const characterColumns = useMemo(() => {
+    return columns({
+      onViewDetails: handleViewDetails,
+      onToggleFavorite: handleToggleFavorite,
+      isFavorite,
+    });
+  }, [favorites]);
+
+  const filteredCharacters = useMemo(() => {
+    return filterCharacters(data, filters);
+  }, [data, filters]);
+
+  const displayedCharacters = useMemo(() => {
+    if (isInfiniteScroll) {
+      // For infinite scroll, show all characters up to current page
+      return filteredCharacters.slice(0, currentPage * pageSize);
+    }
+    return paginateCharacters(filteredCharacters, currentPage, pageSize);
+  }, [filteredCharacters, currentPage, pageSize, isInfiniteScroll]);
+
+  const hasNextPage = useMemo(() => {
+    if (isInfiniteScroll) {
+      // Check if there are more characters to load
+      return currentPage * pageSize < filteredCharacters.length;
+    }
+    return currentPage < Math.ceil(filteredCharacters.length / pageSize);
+  }, [isInfiniteScroll, currentPage, pageSize, filteredCharacters.length]);
+
+  const totalPages = Math.ceil(filteredCharacters.length / pageSize);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setCurrentPage(1);
+  };
+
+  const handleModeToggle = () => {
+    setIsInfiniteScroll(!isInfiniteScroll);
+    setCurrentPage(1);
+  };
+
+  const handleLoadMore = () => {
+    if (isInfiniteScroll && hasNextPage && !isFetchingNextPage) {
+      setIsFetchingNextPage(true);
+      setTimeout(() => {
+        setCurrentPage((prev) => prev + 1);
+        setIsFetchingNextPage(false);
+      }, 200);
+    }
+  };
+
+  const handleFiltersChange = (newFilters: FilterState) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
   };
 
   return (
-    <div className="w-full space-y-4">
-      {/* Search and Controls */}
-      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-        <div className="relative w-full sm:w-80">
-          <Input
-            placeholder="Search by name, homeworld, or gender..."
-            value={searchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="pl-10"
-          />
-          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-            🔍
-          </span>
-        </div>
-
-        <div className="text-sm text-gray-600">
-          Showing {filteredAndSortedData.length} of {data.length} characters
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="rounded-md border bg-white">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-gray-50">
-              {[
-                { key: "name", label: "Name" },
-                { key: "height", label: "Height" },
-                { key: "mass", label: "Mass" },
-                { key: "hair_color", label: "Hair Color" },
-                { key: "eye_color", label: "Eye Color" },
-                { key: "birth_year", label: "Birth Year" },
-                { key: "gender", label: "Gender" },
-                { key: "homeworld", label: "Homeworld" },
-                { key: "films", label: "Films" },
-                { key: "species", label: "Species" },
-              ].map(({ key, label }) => (
-                <TableHead
-                  key={key}
-                  className="cursor-pointer hover:bg-gray-100"
-                >
-                  <Button
-                    variant="ghost"
-                    onClick={() => handleSort(key as keyof Character)}
-                    className="h-auto p-0 font-semibold text-left hover:bg-transparent"
-                  >
-                    {label} {getSortIcon(key as keyof Character)}
-                  </Button>
-                </TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {paginatedData.length > 0 ? (
-              paginatedData.map((character, index) => (
-                <TableRow
-                  key={character.url}
-                  className={cn(
-                    "hover:bg-gray-50 transition-colors",
-                    index % 2 === 0 ? "bg-white" : "bg-gray-25"
-                  )}
-                >
-                  <TableCell className="font-medium">
-                    {character.name}
-                  </TableCell>
-                  <TableCell>
-                    {character.height === "unknown"
-                      ? "Unknown"
-                      : `${character.height}cm`}
-                  </TableCell>
-                  <TableCell>
-                    {character.mass === "unknown"
-                      ? "Unknown"
-                      : `${character.mass}kg`}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary" className="capitalize">
-                      {character.hair_color === "n/a"
-                        ? "N/A"
-                        : character.hair_color}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="capitalize">
-                      {character.eye_color === "n/a"
-                        ? "N/A"
-                        : character.eye_color}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{character.birth_year}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        character.gender === "male" ? "default" : "secondary"
-                      }
-                      className="capitalize"
-                    >
-                      {character.gender === "n/a" ? "N/A" : character.gender}
-                    </Badge>
-                  </TableCell>
-                  <TableCell
-                    className="max-w-32 truncate"
-                    title={character.homeworld}
-                  >
-                    {character.homeworld}
-                  </TableCell>
-                  <TableCell className="max-w-32">
-                    <div className="flex flex-wrap gap-1">
-                      {character.films.length > 0 ? (
-                        character.films.slice(0, 2).map((film, i) => (
-                          <Badge key={i} variant="outline" className="text-xs">
-                            Film {i + 1}
-                          </Badge>
-                        ))
-                      ) : (
-                        <span className="text-gray-400">None</span>
-                      )}
-                      {character.films.length > 2 && (
-                        <Badge variant="outline" className="text-xs">
-                          +{character.films.length - 2}
-                        </Badge>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell className="max-w-32">
-                    <div className="flex flex-wrap gap-1">
-                      {character.species.length > 0 ? (
-                        character.species.slice(0, 2).map((species, i) => (
-                          <Badge
-                            key={i}
-                            variant="secondary"
-                            className="text-xs"
-                          >
-                            Species {i + 1}
-                          </Badge>
-                        ))
-                      ) : (
-                        <span className="text-gray-400">None</span>
-                      )}
-                      {character.species.length > 2 && (
-                        <Badge variant="secondary" className="text-xs">
-                          +{character.species.length - 2}
-                        </Badge>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={10}
-                  className="h-24 text-center text-gray-500"
-                >
-                  {searchTerm
-                    ? "No characters found matching your search."
-                    : "No characters available."}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
+    <div className="space-y-3">
+      <Card className="p-6 star-wars-border">
         <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-600">
-            Page {currentPage} of {totalPages}
+          <div>
+            <h2 className="text-2xl font-bold text-primary">Characters</h2>
+            <p className="text-muted-foreground mt-1">
+              {filteredCharacters.length} of {data.length} characters
+              {filteredCharacters.length !== data.length && " (filtered)"}
+            </p>
           </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </Button>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="text-primary">
+              {displayedCharacters.length} displayed
+            </Badge>
+            <Badge variant="outline" className="text-primary">
+              {favorites.length} favorites
+            </Badge>
           </div>
         </div>
-      )}
+
+        <CharacterFilters
+          filters={filters}
+          onFiltersChange={handleFiltersChange}
+          characters={data}
+        />
+
+        <DataTable
+          columns={characterColumns}
+          data={displayedCharacters}
+          searchKey="name"
+          searchPlaceholder="This search is handled by filters above..."
+          isInfiniteScroll={isInfiniteScroll}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={handleLoadMore}
+        />
+      </Card>
+
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalCount={filteredCharacters.length}
+        pageSize={pageSize}
+        isInfiniteScroll={isInfiniteScroll}
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
+        onModeToggle={handleModeToggle}
+        hasMore={hasNextPage}
+      />
+
+      <CharacterDetailsModal
+        character={selectedCharacter}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onToggleFavorite={handleToggleFavorite}
+        isFavorite={selectedCharacter ? isFavorite(selectedCharacter) : false}
+      />
     </div>
   );
 }
