@@ -72,7 +72,6 @@ export function DataTable<TData, TValue>({
   const tableRows = table.getRowModel().rows;
   const parentRef = useRef<HTMLDivElement>(null);
   
-  // Setup virtualizer for infinite scroll
   const rowVirtualizer = useVirtualizer({
     count: isInfiniteScroll && hasNextPage ? tableRows.length + 1 : tableRows.length,
     getScrollElement: () => parentRef.current,
@@ -80,12 +79,13 @@ export function DataTable<TData, TValue>({
     overscan: 5,
   });
 
+  const virtualItems = rowVirtualizer.getVirtualItems();
+
   // Trigger fetchNextPage when scrolling near the end
   useEffect(() => {
     if (!isInfiniteScroll || !fetchNextPage) return;
 
-    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
-    
+    const [lastItem] = [...virtualItems].reverse();
     if (!lastItem) return;
 
     if (
@@ -101,7 +101,7 @@ export function DataTable<TData, TValue>({
     fetchNextPage,
     tableRows.length,
     isFetchingNextPage,
-    rowVirtualizer.getVirtualItems(),
+    virtualItems,
     pageSize,
   ]);
 
