@@ -158,7 +158,7 @@ export function FavoritesTable() {
                 variant="outline"
                 size="sm"
                 onClick={handleClearAllFavorites}
-                className="star-wars-border bg-transparent text-destructive hover:bg-destructive/10"
+                className="bg-transparent text-destructive"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Clear All

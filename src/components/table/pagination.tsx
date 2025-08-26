@@ -54,7 +54,7 @@ export function PaginationControls({
             variant="outline"
             size="sm"
             onClick={onModeToggle}
-            className="star-wars-border bg-transparent"
+            className="bg-transparent"
           >
             {isInfiniteScroll ? (
               <>
@@ -90,7 +90,7 @@ export function PaginationControls({
 
         {isInfiniteScroll ? (
           <div className="flex items-center gap-2">
-            {hasMore && (
+            {/* {hasMore && (
               <Button
                 onClick={onLoadMore}
                 disabled={loading}
@@ -98,7 +98,7 @@ export function PaginationControls({
               >
                 {loading ? "Loading..." : "Load More"}
               </Button>
-            )}
+            )} */}
             {!hasMore && totalCount > pageSize && (
               <Badge variant="secondary" className="text-primary">
                 All characters loaded

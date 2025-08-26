@@ -71,7 +71,7 @@ export function CharacterFilters({ filters, onFiltersChange, characters }: Chara
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-80 p-0" align="end">
-          <Card className="border-0 shadow-lg">
+          <Card className="border-0 shadow-lg py-0">
             <div className="p-4 border-b border-border">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-primary">Advanced Filters</h3>
