@@ -147,6 +147,7 @@ export function PeopleTable({ data }: { data: People }) {
           searchKey="name"
           searchPlaceholder="This search is handled by filters above..."
           isInfiniteScroll={isInfiniteScroll}
+          pageSize={pageSize}
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
           fetchNextPage={handleLoadMore}

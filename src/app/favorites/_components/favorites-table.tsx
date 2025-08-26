@@ -176,6 +176,11 @@ export function FavoritesTable() {
           data={paginatedCharacters}
           searchKey="name"
           searchPlaceholder="This search is handled by filters above..."
+          pageSize={pageSize}
+          isInfiniteScroll={isInfiniteScroll}
+          hasNextPage={hasMore}
+          isFetchingNextPage={false}
+          fetchNextPage={handleLoadMore}
         />
       </Card>
 
