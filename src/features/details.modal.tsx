@@ -61,7 +61,10 @@ export function CharacterDetailsModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] p-0 star-wars-border bg-card">
+      <DialogContent
+        showCloseButton={false}
+        className="max-w-4xl max-h-[90vh] p-0 star-wars-border bg-card overflow-hidden flex flex-col"
+      >
         <DialogHeader className="p-6 pb-0">
           <div className="flex items-start justify-between">
             <div className="flex-1">
@@ -101,7 +104,7 @@ export function CharacterDetailsModal({
           </div>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 px-6 pb-6">
+        <ScrollArea className="flex-1 px-6 pb-6 overflow-auto">
           <div className="space-y-6">
             {/* Physical Characteristics */}
             <Card>
@@ -157,11 +160,7 @@ export function CharacterDetailsModal({
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {character.films.map((film, index) => (
-                      <Badge
-                        key={index}
-                        variant="outline"
-                      
-                      >
+                      <Badge key={index} variant="outline">
                         {film}
                       </Badge>
                     ))}

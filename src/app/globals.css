@@ -257,6 +257,13 @@
     border-color: var(--empire-gray);
   }
 
+  /* Star Wars border styling */
+  .star-wars-border {
+    border: 2px solid var(--primary);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 15px var(--primary/20), inset 0 0 15px var(--primary/5);
+  }
+
   /* Lightsaber glow effects */
   .lightsaber-glow-blue {
     box-shadow: 0 0 10px var(--lightsaber-blue), 0 0 20px var(--lightsaber-blue);
